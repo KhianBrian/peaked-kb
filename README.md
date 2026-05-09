@@ -30,6 +30,8 @@ Read the relevant file before starting work:
 - [06-traps-and-lessons.md](06-traps-and-lessons.md): self-learning log for painful bugs and repeated mistakes.
 - [07-planning-expert.md](07-planning-expert.md): phased planning format for new features.
 - [08-dependency-and-lovable-safety.md](08-dependency-and-lovable-safety.md): version discipline and Lovable compatibility checks.
+- [09-ui-animation-standards.md](09-ui-animation-standards.md): Peaked UI quality bar, motion rules, visual QA, and stack-compatible animation guidance.
+- [audits/AUDIT_ENTRY_FORMAT.md](audits/AUDIT_ENTRY_FORMAT.md): format for audit entries after meaningful fixes, modifications, and workflow changes.
 
 ## Default Agent Workflow
 
@@ -39,4 +41,5 @@ Read the relevant file before starting work:
 4. Make the smallest complete change that solves the request.
 5. Run lint, typecheck, build, or targeted checks when available.
 6. If debugging took several attempts, update [06-traps-and-lessons.md](06-traps-and-lessons.md).
-
+7. For UI or animation work, use the `peaked-ui-director` Codex skill and read [09-ui-animation-standards.md](09-ui-animation-standards.md).
+8. For meaningful app or workflow changes, add an audit entry under [audits](audits).
