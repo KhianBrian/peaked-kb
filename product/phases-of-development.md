@@ -97,6 +97,30 @@ The product can still feel like job discovery because Peaked owns the ranking, r
 
 ## Phase 0 - Discovery And Decisions
 
+Status as of 2026-05-10: **Complete enough to proceed.**
+
+Completed decisions/docs:
+
+- Backend/auth: Supabase selected for Phase 1.
+- Payment: PayMongo Payment Link selected for private beta, `PHP 99` founding/tester price.
+- AI provider: OpenRouter acceptable for testing behind server-side adapter; concrete beta model map documented.
+- Job strategy: Philippine and remote VA jobs for Filipinos prioritized; user-submitted jobs and approved APIs/feeds first.
+- Ranking model v1 documented.
+- Quota/entitlement v1 documented.
+- Privacy and retention v1 documented.
+- Supabase confirmation email template documented.
+
+Key Phase 0 docs:
+
+- `product/phase-0-decisions.md`
+- `product/paymongo-payment-plan.md`
+- `product/ai-provider-shortlist.md`
+- `product/job-source-matrix.md`
+- `product/ranking-model-v1.md`
+- `product/quota-and-entitlements-v1.md`
+- `foundation/privacy-and-retention.md`
+- `product/supabase-auth-email-template.md`
+
 Goals:
 
 - Choose backend provider: Lovable Cloud/Supabase or another Postgres-backed backend.
@@ -125,6 +149,29 @@ Exit criteria:
 - Initial quota numbers chosen.
 
 ## Phase 1 - Backend Foundation
+
+Status as of 2026-05-10: **In progress.**
+
+Completed:
+
+- Supabase project created.
+- Supabase email/password auth enabled and tested.
+- User sign-up appears in Supabase Auth Users.
+- Production app works with Supabase publishable browser config after Lovable updates.
+- `/auth` uses Supabase email/password sign-up and sign-in.
+- `/auth/verified` exists for branded email-confirmation landing and onboarding handoff.
+- Auth and onboarding UI polished with Peaked logo, show-password control, sign-up password requirements, verification notice, and Motion transitions.
+- `SUPABASE_SERVICE_ROLE_KEY` plan approved conceptually for Lovable encrypted server-only secrets, but confirm whether the secret was actually added before using admin/server operations.
+
+Still missing / resume here:
+
+- Add Supabase database schema and migrations for `profiles`, `plans`, `usage_counters`, `usage_events`, `activity_events`, and `manual_entitlement_grants`.
+- Add RLS policies for user-owned reads and admin/server-only writes.
+- Add private storage buckets for future resumes and generated documents.
+- Ensure new auth users get app `profiles`.
+- Replace mock Profile page data with real profile/plan/usage data.
+- Add safe manual Dedicated beta grant flow for PayMongo-confirmed users.
+- Decide whether Google OAuth belongs in this phase or after email/password/profile is stable.
 
 Goals:
 
@@ -377,4 +424,3 @@ Build this first:
 8. Ranked "jobs worth your time today" dashboard.
 
 This gives Peaked a differentiated command-center shape early while avoiding the hardest partnership and scraping risks until the platform has traction.
-

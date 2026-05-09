@@ -8,15 +8,19 @@ Phase 1 should make Peaked able to identify a signed-in user, know whether they 
 
 ## Current State
 
-The app is still a polished frontend prototype.
+The app is no longer purely a frontend prototype; the first auth slice is live, but most backend foundation work remains.
 
-Confirmed current state:
+Confirmed current state as of 2026-05-10:
 
-- No Supabase dependency in `peaked-219edec1/package.json`.
-- No Supabase client/server helpers.
+- Supabase dependency exists in `peaked-219edec1/package.json`.
+- Browser Supabase client exists at `src/lib/supabase/client.ts`.
+- `/auth` performs Supabase email/password sign-up and sign-in.
+- `/auth/verified` exists for email confirmation handoff to onboarding.
+- Supabase URL and publishable key are browser-safe config. Lovable currently supports production by ensuring those values are available to the hosted app.
+- `SUPABASE_SERVICE_ROLE_KEY` server-only setup was discussed/approved conceptually through Lovable's secure secret flow, but confirm it is actually stored before writing admin/server code that requires it.
 - No migrations or `supabase` directory.
-- No `.env` files present in the app folder.
-- Auth route currently validates form input locally and navigates without creating a session.
+- No app profile table yet.
+- No plan/quota/usage/activity tables yet.
 - Profile route reads mock user and usage data.
 - PayMongo Payment Link exists outside the app and should remain private until entitlement handling exists.
 
@@ -200,6 +204,21 @@ Do not log payment links, API keys, raw private user data, or future resume cont
 
 ### Slice 1 - Supabase Project And Env
 
+Status: **Mostly complete.**
+
+Completed:
+
+- Supabase project created.
+- Email/password auth enabled and tested.
+- Supabase client dependency installed.
+- Browser client configured.
+- Lovable production app can read browser-safe Supabase config.
+
+Remaining:
+
+- Confirm `SUPABASE_SERVICE_ROLE_KEY` is stored in Lovable's server-only encrypted secrets before using server/admin operations.
+- Keep service-role key out of client code and out of `VITE_*` variables.
+
 Purpose:
 
 - Establish the backend connection safely.
@@ -230,6 +249,8 @@ Verification:
 
 ### Slice 2 - Database Migration V1
 
+Status: **Next slice to start.**
+
 Purpose:
 
 - Add profiles, plans, usage, activity, and manual entitlement grant schema.
@@ -256,6 +277,20 @@ Verification:
 - RLS policy smoke tests.
 
 ### Slice 3 - Auth Client And Profile Creation
+
+Status: **Partially complete.**
+
+Completed:
+
+- Supabase browser client exists.
+- Sign-up/sign-in are wired to Supabase Auth.
+- Email confirmation redirects through `/auth/verified`.
+
+Remaining:
+
+- Add app profile creation for new Supabase auth users.
+- Decide whether profile creation happens through DB trigger, server function, or post-auth client/server flow.
+- Persist role, plan tier, subscription status, and onboarding completion.
 
 Purpose:
 
@@ -381,4 +416,3 @@ Update after implementation:
 - Which email should be the first admin?
 - Should Google OAuth be configured in Phase 1 or after email/password is stable?
 - Should manual grants be done through a minimal admin route or a local/server-only script first?
-
