@@ -64,7 +64,7 @@ What did the user ask for?
 ## Lessons
 
 - Add anything that should speed up future work.
-- If debugging took multiple attempts, also update `../06-traps-and-lessons.md`.
+- If debugging took multiple attempts, also update `../operations/traps-and-lessons.md`.
 ```
 
 ## What Deserves An Audit
@@ -89,4 +89,3 @@ Tiny typo fixes usually do not need an audit unless they clarify a critical work
 - Mention verification honestly.
 - Do not paste long diffs.
 - Do not include secrets, private user data, raw prompts, API keys, or sensitive logs.
-

@@ -163,17 +163,16 @@ Before adding an animation or UI package:
 - Confirm Lovable deployment safety.
 - Confirm peer dependencies.
 - Confirm bundle impact.
-- Update `08-dependency-and-lovable-safety.md` if a new rule is learned.
+- Update `engineering/dependency-and-lovable-safety.md` if a new rule is learned.
 
 ## Recommended Workflow
 
 1. Read the relevant feature plan or create one.
-2. Read `02-component-structure.md`.
+2. Read `engineering/component-structure.md`.
 3. Read this file.
 4. Inspect existing UI patterns.
 5. Build the smallest complete version.
 6. Add motion only where it improves understanding or feel.
 7. Verify in browser across breakpoints.
 8. Run available checks.
-9. Update `06-traps-and-lessons.md` if debugging took too many attempts.
-
+9. Update `operations/traps-and-lessons.md` if debugging took too many attempts.

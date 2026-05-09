@@ -51,7 +51,7 @@ Use this order:
 7. Test the hypothesis with the smallest useful check.
 8. Fix the root cause.
 9. Verify the fix.
-10. Add a lesson to `06-traps-and-lessons.md` if the debugging path was long or surprising.
+10. Add a lesson to `operations/traps-and-lessons.md` if the debugging path was long or surprising.
 
 ## Debugging Questions
 
@@ -108,4 +108,3 @@ Ask the user before proceeding when:
 - There are conflicting product interpretations.
 - Fixing the issue requires changing project architecture.
 - User data privacy expectations are unclear.
-

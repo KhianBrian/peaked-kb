@@ -18,19 +18,34 @@ This folder is the working memory for the Peaked application. Use it before plan
   - Cloudflare/Vite deployment tooling
   - Bun lockfile present
 
-## How To Use This KB
+## Folder Map
 
-Read the relevant file before starting work:
+### Foundation
 
-- [01-architecture.md](01-architecture.md): system boundaries, routing, data flow, deployment assumptions.
-- [02-component-structure.md](02-component-structure.md): where UI belongs and how components should be shaped.
-- [03-caching-strategy.md](03-caching-strategy.md): browser, query, server, AI, and CDN caching rules.
-- [04-ai-api-usage-and-limits.md](04-ai-api-usage-and-limits.md): AI calls, user limits, safety, cost control, abuse protection.
-- [05-senior-developer-mindset-and-debugging.md](05-senior-developer-mindset-and-debugging.md): engineering posture and debugging process.
-- [06-traps-and-lessons.md](06-traps-and-lessons.md): self-learning log for painful bugs and repeated mistakes.
-- [07-planning-expert.md](07-planning-expert.md): phased planning format for new features.
-- [08-dependency-and-lovable-safety.md](08-dependency-and-lovable-safety.md): version discipline and Lovable compatibility checks.
-- [09-ui-animation-standards.md](09-ui-animation-standards.md): Peaked UI quality bar, motion rules, visual QA, and stack-compatible animation guidance.
+- [foundation/architecture.md](foundation/architecture.md): system boundaries, routing, data flow, deployment assumptions.
+- [foundation/database-architecture.md](foundation/database-architecture.md): database tables, roles, plans, AI usage, payments, jobs, and analytics architecture.
+
+### Product
+
+- [product/phases-of-development.md](product/phases-of-development.md): phased development plan for the job-search command center MVP and full platform.
+- [product/future-plans.md](product/future-plans.md): future partnerships, job-board outreach, browser extension research, and long-term job data strategy.
+
+### Engineering
+
+- [engineering/component-structure.md](engineering/component-structure.md): where UI belongs and how components should be shaped.
+- [engineering/caching-strategy.md](engineering/caching-strategy.md): browser, query, server, AI, and CDN caching rules.
+- [engineering/ai-api-usage-and-limits.md](engineering/ai-api-usage-and-limits.md): AI calls, user limits, safety, cost control, abuse protection.
+- [engineering/dependency-and-lovable-safety.md](engineering/dependency-and-lovable-safety.md): version discipline and Lovable compatibility checks.
+- [engineering/ui-animation-standards.md](engineering/ui-animation-standards.md): Peaked UI quality bar, motion rules, visual QA, and stack-compatible animation guidance.
+
+### Operations
+
+- [operations/senior-developer-mindset-and-debugging.md](operations/senior-developer-mindset-and-debugging.md): engineering posture and debugging process.
+- [operations/traps-and-lessons.md](operations/traps-and-lessons.md): self-learning log for painful bugs and repeated mistakes.
+- [operations/planning-expert.md](operations/planning-expert.md): phased planning format for new features.
+
+### Audits
+
 - [audits/AUDIT_ENTRY_FORMAT.md](audits/AUDIT_ENTRY_FORMAT.md): format for audit entries after meaningful fixes, modifications, and workflow changes.
 
 ## Default Agent Workflow
@@ -40,6 +55,7 @@ Read the relevant file before starting work:
 3. Inspect the actual app code before making claims.
 4. Make the smallest complete change that solves the request.
 5. Run lint, typecheck, build, or targeted checks when available.
-6. If debugging took several attempts, update [06-traps-and-lessons.md](06-traps-and-lessons.md).
-7. For UI or animation work, use the `peaked-ui-director` Codex skill and read [09-ui-animation-standards.md](09-ui-animation-standards.md).
+6. If debugging took several attempts, update [operations/traps-and-lessons.md](operations/traps-and-lessons.md).
+7. For UI or animation work, use the `peaked-ui-director` Codex skill and read [engineering/ui-animation-standards.md](engineering/ui-animation-standards.md).
 8. For meaningful app or workflow changes, add an audit entry under [audits](audits).
+
