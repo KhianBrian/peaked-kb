@@ -12,18 +12,18 @@ Start Phase 0, evaluate no-cost backend options, research NextPay versus PayMong
 
 - Project/folder: `peaked-kb`
 - Primary files changed:
-  - `product/phase-0-decisions.md`
-  - `product/job-source-matrix.md`
-  - `product/ai-provider-shortlist.md`
-  - `product/paymongo-payment-plan.md`
-  - `product/ranking-model-v1.md`
-  - `product/quota-and-entitlements-v1.md`
+  - `product/phase-0-discovery/phase-0-decisions.md`
+  - `product/phase-0-discovery/job-source-matrix.md`
+  - `product/phase-0-discovery/ai-provider-shortlist.md`
+  - `product/phase-0-discovery/paymongo-payment-plan.md`
+  - `product/phase-0-discovery/ranking-model-v1.md`
+  - `product/phase-1-backend/quota-and-entitlements-v1.md`
   - `foundation/privacy-and-retention.md`
   - `audits/2026-05-09-phase-0-decision-docs.md`
 - Related files inspected:
   - `README.md`
-  - `product/phases-of-development.md`
-  - `product/future-plans.md`
+  - `product/roadmap/phases-of-development.md`
+  - `product/roadmap/future-plans.md`
   - `foundation/architecture.md`
   - `foundation/database-architecture.md`
   - `engineering/ai-api-usage-and-limits.md`

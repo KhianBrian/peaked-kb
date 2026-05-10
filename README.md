@@ -27,8 +27,9 @@ This folder is the working memory for the Peaked application. Use it before plan
 
 ### Product
 
-- [product/phases-of-development.md](product/phases-of-development.md): phased development plan for the job-search command center MVP and full platform.
-- [product/future-plans.md](product/future-plans.md): future partnerships, job-board outreach, browser extension research, and long-term job data strategy.
+- [product/README.md](product/README.md): product docs index, current checkpoint, and phase folders.
+- [product/roadmap/phases-of-development.md](product/roadmap/phases-of-development.md): phased development plan for the job-search command center MVP and full platform.
+- [product/roadmap/future-plans.md](product/roadmap/future-plans.md): future partnerships, job-board outreach, browser extension research, and long-term job data strategy.
 
 ### Engineering
 
@@ -44,9 +45,14 @@ This folder is the working memory for the Peaked application. Use it before plan
 - [operations/traps-and-lessons.md](operations/traps-and-lessons.md): self-learning log for painful bugs and repeated mistakes.
 - [operations/planning-expert.md](operations/planning-expert.md): phased planning format for new features.
 
+### Checkpoints
+
+- [checkpoints/current.md](checkpoints/current.md): compact resume point for the next session. Read this first when the user asks where development left off or asks to resume from a checkpoint.
+- [checkpoints/README.md](checkpoints/README.md): checkpoint usage rules and format.
+
 ### Audits
 
-- [audits/AUDIT_ENTRY_FORMAT.md](audits/AUDIT_ENTRY_FORMAT.md): format for audit entries after meaningful fixes, modifications, and workflow changes.
+- [audits/AUDIT_ENTRY_FORMAT.md](audits/AUDIT_ENTRY_FORMAT.md): format for optional audit entries. Create audits only when the user explicitly asks to log development or record changes.
 
 ## Default Agent Workflow
 
@@ -57,5 +63,4 @@ This folder is the working memory for the Peaked application. Use it before plan
 5. Run lint, typecheck, build, or targeted checks when available.
 6. If debugging took several attempts, update [operations/traps-and-lessons.md](operations/traps-and-lessons.md).
 7. For UI or animation work, use the `peaked-ui-director` Codex skill and read [engineering/ui-animation-standards.md](engineering/ui-animation-standards.md).
-8. For meaningful app or workflow changes, add an audit entry under [audits](audits).
-
+8. Do not add audit entries automatically. If the user asks to save a checkpoint, update [checkpoints/current.md](checkpoints/current.md) instead of writing a full audit.

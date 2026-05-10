@@ -2,9 +2,9 @@
 
 ## Outcome
 
-Replace the UI-only prototype with a real backend foundation: Supabase auth, app profiles, role/plan separation, manual Dedicated beta grants, quota accounting, activity logging, and private storage buckets.
+Replace the UI-only prototype with a real backend foundation: Supabase auth, app profiles, role/plan separation, user career intent, manual Dedicated beta grants, quota accounting, activity logging, and private storage buckets.
 
-Phase 1 should make Peaked able to identify a signed-in user, know whether they are Free, Dedicated, or Admin, and check quotas before future AI work.
+Phase 1 should make Peaked able to identify a signed-in user, know whether they are Free, Dedicated, or Admin, understand what the user is targeting in their job search, check quotas before future AI work, and support public-beta auth email reliability through custom SMTP.
 
 ## Current State
 
@@ -18,10 +18,20 @@ Confirmed current state as of 2026-05-10:
 - `/auth/verified` exists for email confirmation handoff to onboarding.
 - Supabase URL and publishable key are browser-safe config. Lovable currently supports production by ensuring those values are available to the hosted app.
 - `SUPABASE_SERVICE_ROLE_KEY` server-only setup was discussed/approved conceptually through Lovable's secure secret flow, but confirm it is actually stored before writing admin/server code that requires it.
-- No migrations or `supabase` directory.
-- No app profile table yet.
-- No plan/quota/usage/activity tables yet.
-- Profile route reads mock user and usage data.
+- Supabase migration scaffold exists at `peaked-219edec1/supabase`.
+- Backend foundation migration has been drafted at `peaked-219edec1/supabase/migrations/202605100001_backend_foundation_v1.sql`, but still needs to be applied and smoke-tested against Supabase.
+- App profile, plan/quota/usage/activity tables are defined in the drafted migration, but are not confirmed live until the migration is applied.
+- Migration includes a profile backfill for existing Supabase Auth users, so users created before the profile trigger can still get `profiles` rows.
+- Initial admin route exists at `/admin` for viewing users, roles, plans, usage counters, and token totals recorded in usage event metadata.
+- Profile route reads real Supabase account identity and plan/role state, but usage cards still use mock stats until quota counters are wired into the UI.
+- Top nav avatar, dashboard greeting, and legacy sidebar account block read real Supabase profile identity.
+- Browser Supabase client is lazy-loaded to avoid constructing Supabase Realtime during TanStack SSR on Node 20.
+- Career intent/preferences migration has been drafted at `peaked-219edec1/supabase/migrations/202605100002_career_intents.sql`; apply it before saving career intent in the app.
+- Onboarding includes Career Intent Lite on `/onboarding/get-started`.
+- Profile usage cards read real plan limits and usage counters, with empty-counter fallback states.
+- Profile includes the full editable Career Intent section.
+- `/admin` includes the first manual Dedicated grant workflow for PayMongo-confirmed beta users.
+- Onboarding completion RPC is drafted at `peaked-219edec1/supabase/migrations/202605100003_onboarding_completion_rpc.sql`; apply it before relying on onboarding completion in Supabase.
 - PayMongo Payment Link exists outside the app and should remain private until entitlement handling exists.
 
 ## Non-Goals
@@ -30,10 +40,11 @@ Phase 1 should not:
 
 - Build resume parsing.
 - Call OpenRouter or any AI provider.
+- Generate AI recommendations from career intent.
 - Add PayMongo API/webhook automation.
 - Ingest real jobs.
 - Replace all mock dashboard/job/resume data.
-- Add a public admin dashboard beyond what is needed for manual grants.
+- Add a public admin dashboard beyond what is needed for usage visibility and manual grants.
 - Store the PayMongo live link in client code.
 
 ## Decisions Needed
@@ -45,7 +56,7 @@ Before coding:
 - Confirm the Supabase anon/publishable key.
 - Confirm whether Google OAuth should be enabled immediately or after email/password works.
 - Decide where local env values live for Lovable-safe development.
-- Decide the first admin account email.
+- First admin account email decided: `briansismundo@gmail.com`.
 
 Recommended defaults:
 
@@ -87,6 +98,7 @@ Phase 1 should add these schema pieces first:
 - `subscription_status` enum: `none`, `trialing`, `active`, `past_due`, `cancelled`, `expired`
 - `usage_feature` enum or constrained text strategy
 - `profiles`
+- `career_intents`
 - `plans`
 - `manual_entitlement_grants`
 - `usage_counters`
@@ -116,6 +128,33 @@ Why:
 - Manual grants need an audit trail.
 - This avoids pretending we have subscription webhooks before they exist.
 
+Recommended new table for career intent:
+
+```sql
+career_intents
+- id uuid primary key
+- profile_id uuid unique not null references profiles(id)
+- target_roles text[] not null default '{}'
+- target_industries text[] not null default '{}'
+- seniority text
+- preferred_locations text[] not null default '{}'
+- remote_preference text
+- salary_target_min_php integer
+- salary_target_max_php integer
+- schedule_preference text
+- dealbreakers text[] not null default '{}'
+- work_authorization text
+- notes text
+- created_at timestamptz not null default now()
+- updated_at timestamptz not null default now()
+```
+
+Why:
+
+- Peaked should not infer the user's desired career direction from resume history alone.
+- Job ranking needs explicit goals and constraints before AI explanations or recommendations are trustworthy.
+- This data can power onboarding, profile preferences, job matching, and later AI prompt grounding.
+
 ## API And Server Plan
 
 Create helpers around these responsibilities:
@@ -128,6 +167,8 @@ Create helpers around these responsibilities:
 - `checkQuota`
 - `recordUsageEvent`
 - `recordActivityEvent`
+- `getCareerIntent`
+- `updateCareerIntent`
 - `grantManualEntitlement`
 - `revokeManualEntitlement`
 
@@ -154,10 +195,32 @@ Profile:
 - Show current beta access expiration if present.
 - Show usage counters from real tables when available.
 
+Career intent:
+
+- Add a lightweight onboarding intake for essential job-search goals.
+- Add a full user-editable job-search goals section in Profile.
+- Capture target roles, preferred locations, remote preference, seniority, salary range, industries, schedule preference, and dealbreakers.
+- Treat these fields as structured AI grounding inputs, not decorative profile fields.
+- Allow users to leave fields empty at first, but make missing intent visible before job recommendations.
+
 Paywall:
 
 - Keep PayMongo link out of app until users can sign in and plan state is trustworthy.
 - Once entitlement state exists, the Upgrade CTA can open the PayMongo link or show beta payment instructions.
+
+Admin:
+
+- `/admin` is the first operator surface.
+- Admin users can view app users, roles, plan tiers, subscription states, usage counters, and token totals when usage event metadata includes token fields.
+- Admin users can manually grant Dedicated beta access after confirming PayMongo Payment Link payment.
+- Future admin work should add grant revocation, usage drill-down, and user support actions.
+
+Production auth email:
+
+- Configure custom SMTP before public beta so signup confirmation is not limited by Supabase's built-in development sender.
+- Set Supabase Site URL and Redirect URLs for local, staging, and production.
+- Keep confirmation and recovery templates branded, concise, and pointed at `/auth/verified` or the correct production equivalent.
+- Smoke-test signup confirmation, password recovery, and onboarding handoff with fresh test accounts.
 
 ## Security, Privacy, And Abuse Controls
 
@@ -169,6 +232,7 @@ Must-have Phase 1 controls:
 - Admin-only grant actions must be server-side.
 - Service-role key must never be exposed to client code.
 - Manual grant records must be auditable.
+- Custom SMTP credentials must live only in Supabase/provider settings, never in client code or repo files.
 
 ## Quotas, Billing, Or Entitlements
 
@@ -182,8 +246,9 @@ Add beta handling:
 - `PHP 99` founding beta grants Dedicated access for 30 days.
 - Manual grant sets `plan_tier = dedicated`, `subscription_status = active`, and creates a grant record.
 - Expired grants should eventually downgrade the user unless another active grant/payment exists.
+- For the first beta, admins confirm the PayMongo Payment Link payment outside the app, then use `/admin` to grant access.
 
-Initial beta limits should follow `product/quota-and-entitlements-v1.md`.
+Initial beta limits should follow `product/phase-1-backend/quota-and-entitlements-v1.md`.
 
 ## Observability And Analytics
 
@@ -205,6 +270,25 @@ Do not log payment links, API keys, raw private user data, or future resume cont
 ### Slice 1 - Supabase Project And Env
 
 Status: **Mostly complete.**
+
+### Slice 2 - Production Auth Email Readiness
+
+Status: **Planned before public beta.**
+
+Tasks:
+
+- Choose SMTP provider for public beta.
+- Configure Supabase custom SMTP.
+- Set Site URL and allowed redirect URLs for local and production.
+- Apply branded confirmation and recovery email templates.
+- Test signup, confirmation, sign-in, password recovery, and onboarding redirect with fresh accounts.
+
+Exit criteria:
+
+- Signup confirmation can handle more than the built-in Supabase 2-email/hour development limit.
+- Confirmation links return users to the intended Peaked auth/onboarding path.
+- Password recovery works with branded email copy.
+- No SMTP credentials exist in the app repository.
 
 Completed:
 
@@ -249,7 +333,7 @@ Verification:
 
 ### Slice 2 - Database Migration V1
 
-Status: **Next slice to start.**
+Status: **Drafted; apply and smoke-test next.**
 
 Purpose:
 
@@ -265,11 +349,13 @@ Contracts:
 - Enums and tables listed above.
 - RLS policies for user-owned data.
 - Seed rows for `free` and `dedicated`.
+- `briansismundo@gmail.com` is promoted to `role = admin` when that Supabase Auth user/profile exists.
 
 Risks:
 
 - Weak RLS.
 - Admin operations too broad.
+- Migration has not been applied yet because the local Supabase CLI is not installed in this environment.
 
 Verification:
 
@@ -320,9 +406,22 @@ Verification:
 
 ### Slice 4 - Profile Page Real Data
 
+Status: **Partially complete.**
+
 Purpose:
 
 - Replace mock profile and usage summary with database-backed reads.
+
+Completed:
+
+- Profile identity, role, and plan tier read from Supabase.
+- Usage cards read plan limits and usage counters from Supabase.
+- Empty usage counters fall back to `0 / plan limit`.
+
+Remaining:
+
+- Show active beta grant details more fully.
+- Add richer usage history once real usage events exist.
 
 Files/areas likely touched:
 
@@ -374,6 +473,41 @@ Verification:
 - Non-admin cannot grant access.
 - Grant creates an activity event.
 
+### Slice 6 - Career Intent Foundation
+
+Status: **Drafted in migration, onboarding lite UI, and profile full UI; apply and smoke-test next.**
+
+Purpose:
+
+- Store what the user wants next in their job search before Peaked starts ranking jobs or generating AI outputs.
+
+Files/areas likely touched:
+
+- `peaked-219edec1/supabase/migrations/*`
+- `src/routes/profile.tsx`
+- `src/components/profile/*` if the UI grows beyond the route file.
+- `src/lib/profile/*`
+
+Contracts:
+
+- Each profile can have one career intent record.
+- Users can read and update only their own career intent.
+- Admins can view career intent for support and future quality review.
+- Career intent fields remain structured enough for ranking and AI prompt grounding.
+
+Risks:
+
+- Asking too much too early and making onboarding feel heavy.
+- Treating user goals as permanent when job-search intent changes often.
+- Letting free-form notes become the only source of truth.
+
+Verification:
+
+- User can save and edit career intent.
+- Another user cannot read or update it.
+- Admin can inspect it.
+- Empty career intent has a clear UI state.
+
 ## Verification Plan
 
 Run after implementation slices:
@@ -405,14 +539,14 @@ Fallback:
 Update after implementation:
 
 - `foundation/database-architecture.md` if schema differs.
-- `product/paymongo-payment-plan.md` if grant flow changes.
-- `product/quota-and-entitlements-v1.md` if limits change.
+- `product/phase-0-discovery/paymongo-payment-plan.md` if grant flow changes.
+- `product/phase-1-backend/quota-and-entitlements-v1.md` if limits change.
 - Add a new audit entry under `peaked-kb/audits`.
 
 ## Open Questions
 
 - What is the Supabase project URL?
 - What is the Supabase anon/publishable key?
-- Which email should be the first admin?
+- Has `briansismundo@gmail.com` signed up in Supabase Auth after the migration is applied, or does the existing auth user need profile backfill verification?
 - Should Google OAuth be configured in Phase 1 or after email/password is stable?
 - Should manual grants be done through a minimal admin route or a local/server-only script first?

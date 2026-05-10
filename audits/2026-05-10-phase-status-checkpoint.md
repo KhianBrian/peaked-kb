@@ -12,14 +12,14 @@ The user ran out of Lovable credits and asked to pull latest repos, push updates
 
 - Project/folder: `peaked-kb`
 - Primary files changed:
-  - `product/phases-of-development.md`
-  - `product/phase-1-backend-foundation-plan.md`
-  - `product/resume-point.md`
+  - `product/roadmap/phases-of-development.md`
+  - `product/phase-1-backend/phase-1-backend-foundation-plan.md`
+  - `product/current/resume-point.md`
   - `audits/2026-05-10-phase-status-checkpoint.md`
 - Related files inspected:
   - `peaked-219edec1/src/routeTree.gen.ts`
-  - `peaked-kb/product/phases-of-development.md`
-  - `peaked-kb/product/phase-1-backend-foundation-plan.md`
+  - `peaked-kb/product/roadmap/phases-of-development.md`
+  - `peaked-kb/product/phase-1-backend/phase-1-backend-foundation-plan.md`
 
 ## Changes Made
 

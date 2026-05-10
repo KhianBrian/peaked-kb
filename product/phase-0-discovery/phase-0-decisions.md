@@ -100,7 +100,7 @@ Implementation rule:
 
 No payment provider should unlock `plan_tier = dedicated` from client-side return URLs alone. Dedicated access must be granted from trusted server-side verification, preferably signed webhook events. If early Payment Links are used before full webhooks, admin-confirmed manual activation is acceptable for a private beta.
 
-See `product/paymongo-payment-plan.md`.
+See `product/phase-0-discovery/paymongo-payment-plan.md`.
 
 Sources checked:
 
@@ -159,7 +159,7 @@ Current recommendation:
 
 Provider calls must remain server-side, and every expensive action must be quota-checked before the call.
 
-See `product/ai-provider-shortlist.md`.
+See `product/phase-0-discovery/ai-provider-shortlist.md`.
 
 ## Privacy And Retention Direction
 

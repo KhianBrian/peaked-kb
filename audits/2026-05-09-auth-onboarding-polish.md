@@ -19,7 +19,7 @@ The user tested account creation and reported missing verification messaging, no
   - `peaked-219edec1/src/routes/onboarding.how-it-works.tsx`
   - `peaked-219edec1/src/routes/onboarding.get-started.tsx`
   - `peaked-219edec1/public/peaked-email-hero.png`
-  - `peaked-kb/product/supabase-auth-email-template.md`
+  - `peaked-kb/product/phase-1-backend/supabase-auth-email-template.md`
   - `peaked-kb/audits/2026-05-09-auth-onboarding-polish.md`
 - Related files inspected:
   - `peaked-kb/engineering/component-structure.md`

@@ -12,12 +12,12 @@ The user logged the PayMongo link/reference and asked to proceed.
 
 - Project/folder: `peaked-kb`
 - Primary files changed:
-  - `product/phase-1-backend-foundation-plan.md`
+  - `product/phase-1-backend/phase-1-backend-foundation-plan.md`
   - `audits/2026-05-09-phase-1-backend-foundation-plan.md`
 - Related files inspected:
-  - `product/phases-of-development.md`
+  - `product/roadmap/phases-of-development.md`
   - `foundation/database-architecture.md`
-  - `product/paymongo-payment-plan.md`
+  - `product/phase-0-discovery/paymongo-payment-plan.md`
   - `audits/AUDIT_ENTRY_FORMAT.md`
   - `peaked-219edec1/package.json`
   - `peaked-219edec1/vite.config.ts`

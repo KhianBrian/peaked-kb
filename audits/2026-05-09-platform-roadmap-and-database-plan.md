@@ -13,7 +13,7 @@ Scan the Peaked codebase, identify missing features, plan database architecture 
 - Project/folder: `peaked-kb` planning documentation with read-only inspection of `peaked-219edec1`.
 - Primary files changed:
   - `peaked-kb/README.md`
-  - `peaked-kb/product/phases-of-development.md`
+  - `peaked-kb/product/roadmap/phases-of-development.md`
   - `peaked-kb/foundation/database-architecture.md`
   - `peaked-kb/audits/2026-05-09-platform-roadmap-and-database-plan.md`
 - Related files inspected:

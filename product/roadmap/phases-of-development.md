@@ -12,6 +12,15 @@ The core loop:
 Discover -> Rank -> Tailor -> Apply -> Prepare -> Track -> Learn
 ```
 
+Peaked's intelligence should be grounded in four user data layers:
+
+- `Account foundation`: identity, role, plan, quotas, and trusted permissions.
+- `Career intent`: target roles, preferred work setup, salary goals, locations, industries, constraints, and dealbreakers.
+- `Career evidence`: resumes, projects, skills, achievements, work history, education, and user-approved corrections.
+- `Outcome feedback`: saved jobs, dismissed jobs, applications, interviews, offers, rejections, and what the user says worked.
+
+AI should not guess what the user wants from a resume alone. It should use structured career intent plus career evidence before recommending jobs, tailoring materials, or preparing interviews.
+
 ## Current Codebase Scan
 
 The current app is a polished UI prototype.
@@ -45,6 +54,7 @@ Current missing capabilities:
 - Usage limits and quota accounting.
 - Real analytics and application tracking.
 - Admin operations dashboard.
+- Structured career intent collection for what the user wants next in their job search.
 
 ## Product Roles
 
@@ -112,14 +122,14 @@ Completed decisions/docs:
 
 Key Phase 0 docs:
 
-- `product/phase-0-decisions.md`
-- `product/paymongo-payment-plan.md`
-- `product/ai-provider-shortlist.md`
-- `product/job-source-matrix.md`
-- `product/ranking-model-v1.md`
-- `product/quota-and-entitlements-v1.md`
+- `product/phase-0-discovery/phase-0-decisions.md`
+- `product/phase-0-discovery/paymongo-payment-plan.md`
+- `product/phase-0-discovery/ai-provider-shortlist.md`
+- `product/phase-0-discovery/job-source-matrix.md`
+- `product/phase-0-discovery/ranking-model-v1.md`
+- `product/phase-1-backend/quota-and-entitlements-v1.md`
 - `foundation/privacy-and-retention.md`
-- `product/supabase-auth-email-template.md`
+- `product/phase-1-backend/supabase-auth-email-template.md`
 
 Goals:
 
@@ -162,15 +172,17 @@ Completed:
 - `/auth/verified` exists for branded email-confirmation landing and onboarding handoff.
 - Auth and onboarding UI polished with Peaked logo, show-password control, sign-up password requirements, verification notice, and Motion transitions.
 - `SUPABASE_SERVICE_ROLE_KEY` plan approved conceptually for Lovable encrypted server-only secrets, but confirm whether the secret was actually added before using admin/server operations.
+- Supabase migrations drafted for backend foundation, career intent, and onboarding completion.
+- Profile and onboarding now collect career intent so future AI work is grounded in user goals.
+- `/admin` can view users, roles, plan state, usage counters, token totals, and manually grant Dedicated beta access after confirmed PayMongo Payment Link payments.
 
 Still missing / resume here:
 
-- Add Supabase database schema and migrations for `profiles`, `plans`, `usage_counters`, `usage_events`, `activity_events`, and `manual_entitlement_grants`.
-- Add RLS policies for user-owned reads and admin/server-only writes.
-- Add private storage buckets for future resumes and generated documents.
-- Ensure new auth users get app `profiles`.
-- Replace mock Profile page data with real profile/plan/usage data.
-- Add safe manual Dedicated beta grant flow for PayMongo-confirmed users.
+- Apply and smoke-test every Phase 1 migration in the live Supabase project, including onboarding completion.
+- Run a full new-user flow: sign up, confirm email, sign in, onboarding Career Intent Lite, profile career intent edit, and admin visibility.
+- Configure production auth email readiness before public beta: custom SMTP, Site URL, Redirect URLs, branded confirmation/recovery templates, and signup/password-reset tests.
+- Add a documented beta support playbook for confirming PayMongo payments and granting/revoking Dedicated access.
+- Decide whether expired manual grants should be downgraded by admin routine, scheduled job, or later webhook automation.
 - Decide whether Google OAuth belongs in this phase or after email/password/profile is stable.
 
 Goals:
@@ -185,10 +197,14 @@ Tasks:
 - Add `Admin`, `Free user`, and `Dedicated user` access model.
 - Add server-side authorization helpers.
 - Add plan and quota tables.
+- Add career intent/preferences tables.
 - Add usage event logging.
 - Add activity event logging.
 - Add private storage buckets for resumes and generated documents.
 - Replace mock profile and usage data with database-backed reads.
+- Collect target roles, locations, remote preference, salary target, industries, seniority, schedule, and dealbreakers.
+- Configure custom SMTP and production auth redirect settings before public beta.
+- Verify confirmation, recovery, onboarding handoff, and rate-limit behavior with fresh test accounts.
 
 Exit criteria:
 
@@ -196,6 +212,7 @@ Exit criteria:
 - Server can identify role and plan tier.
 - Quotas can be checked before expensive actions.
 - Profile page can show real account and plan data.
+- User has a saved career intent profile for future job ranking and AI grounding.
 
 ## Phase 2 - Career Evidence And Resume Parsing
 
@@ -230,7 +247,7 @@ Goals:
 
 Tasks:
 
-- Add job goals/preferences onboarding.
+- Expand job goals/preferences onboarding from the Phase 1 career intent foundation.
 - Add job source adapters for approved APIs.
 - Add user-submitted job URL/description flow.
 - Normalize jobs into a shared schema.

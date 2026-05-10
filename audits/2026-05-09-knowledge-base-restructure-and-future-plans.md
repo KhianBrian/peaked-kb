@@ -15,8 +15,8 @@ Remove numbered KB file names, sort the docs into folders, rename the roadmap in
   - `README.md`
   - `foundation/architecture.md`
   - `foundation/database-architecture.md`
-  - `product/phases-of-development.md`
-  - `product/future-plans.md`
+  - `product/roadmap/phases-of-development.md`
+  - `product/roadmap/future-plans.md`
   - `engineering/*`
   - `operations/*`
   - `audits/AUDIT_ENTRY_FORMAT.md`
@@ -33,7 +33,7 @@ Remove numbered KB file names, sort the docs into folders, rename the roadmap in
 - Moved debugging, traps, and planning docs into `operations`.
 - Rewrote the README with the new folder map.
 - Reframed the MVP as a job-search command center: discover, rank, tailor, apply, prepare, track, learn.
-- Added job-board outreach and partnership planning in `product/future-plans.md`.
+- Added job-board outreach and partnership planning in `product/roadmap/future-plans.md`.
 
 ## Decisions
 

@@ -125,6 +125,35 @@ Risks to research:
 - Data privacy.
 - Handling login-gated content.
 
+## Contextual Missing-Info Prompts
+
+Peaked should eventually ask for missing career intent only at the moment it improves a workflow.
+
+Recommended pattern:
+
+```text
+User starts a task
+-> Peaked checks whether required intent fields exist
+-> If something important is missing, ask one focused question
+-> Save the answer to career_intents
+-> Continue the task without sending the user away
+```
+
+Examples:
+
+- Before ranking jobs, ask for target roles if none are saved.
+- Before filtering remote jobs, ask for remote/hybrid/onsite preference.
+- Before salary fit scoring, ask for a minimum monthly PHP target.
+- Before dismissing many jobs for schedule mismatch, ask whether night shift is a dealbreaker.
+
+Rules:
+
+- Ask one to three questions at a time.
+- Explain why the answer improves the current result.
+- Always let the user skip unless the task cannot work without the answer.
+- Save answers back to the full career intent profile.
+- Do not block first-run onboarding with every possible preference.
+
 ## Long-Term Data Strategy
 
 Start with:
@@ -147,4 +176,3 @@ Avoid:
 - Circumventing access controls.
 - Storing restricted job databases without permission.
 - Presenting another platform's data as Peaked-owned content.
-
